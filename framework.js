@@ -236,13 +236,25 @@ const ChatLogger = {
 
 // Initialize the chat logger when the framework is ready
 if (window.GameMenuExtension) {
-  ChatLogger.init();
+  setTimeout(() => {
+    ChatLogger.init();
+    // Force navigation update to show the new page
+    if (window.GameMenuExtension.getCurrentPageIndex() === 0) {
+      window.GameMenuExtension.navigateToPage(1);
+    }
+  }, 500);
 } else {
   // Wait for the framework to be ready
   const checkInterval = setInterval(() => {
     if (window.GameMenuExtension) {
       clearInterval(checkInterval);
       ChatLogger.init();
+      // Force navigation update to show the new page
+      setTimeout(() => {
+        if (window.GameMenuExtension.getCurrentPageIndex() === 0) {
+          window.GameMenuExtension.navigateToPage(1);
+        }
+      }, 500);
     }
   }, 100);
 }
